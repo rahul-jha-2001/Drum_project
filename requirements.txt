@@ -1,0 +1,4 @@
+mido 
+mido[ports-rtmidi]
+python-rtmidi
+PyQt6
