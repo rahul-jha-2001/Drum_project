@@ -28,9 +28,6 @@ class PortSelectionDialog(QDialog):
         self.setWindowTitle("Select MIDI Port")
         self.setModal(True)
 
-        self.reload_button = QPushButton("Reload Ports")
-        self.reload_button.clicked.connect(self._reload_ports)
-
         self.port_box = QComboBox()
         self.port_box.addItems(ports)
 
@@ -47,16 +44,13 @@ class PortSelectionDialog(QDialog):
     def selected_port(self) -> str:
         return self.port_box.currentText()
 
-    def _reload_ports(self):
-        self.port_box.clear()
-        ports = mido.get_input_names()
-        self.port_box.addItems(ports)
 
 # ============================================================
 # Main GUI window
 # ============================================================
 class DrumApp(QWidget):
-    note_received = pyqtSignal(int)    # midi_note -> MusicSheetWidget
+    # note, velocity
+    note_received = pyqtSignal(int, int)
 
     def __init__(self):
         super().__init__()
@@ -73,7 +67,7 @@ class DrumApp(QWidget):
         self.port_label = QLabel("")
         self.port_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        # The scrolling music sheet panel
+        # Notation sheet widget
         self.sheet = MusicSheetWidget(note_names=NOTE_NAMES)
 
         quit_button = QPushButton("Quit")
@@ -90,10 +84,10 @@ class DrumApp(QWidget):
 
         self.setLayout(layout)
 
-        # Connect MIDI → GUI update
-        self.note_received.connect(self.sheet.add_note)
+        # Connect MIDI → sheet
+        self.note_received.connect(self.sheet.add_midi_hit)
 
-        # Show startup screen then prompt for port
+        # Show startup, then ask for port
         QTimer.singleShot(800, self.show_port_dialog)
 
     # ============================================================
@@ -113,10 +107,6 @@ class DrumApp(QWidget):
             return
 
         dialog = PortSelectionDialog(ports, self)
-        dialog.reload_button = QPushButton("Reload Ports")
-        dialog.reload_button.clicked.connect(dialog._reload_ports)
-        dialog.layout().addWidget(dialog.reload_button)
-
         result = dialog.exec()
 
         if result == QDialog.DialogCode.Accepted:
@@ -130,16 +120,16 @@ class DrumApp(QWidget):
     # ============================================================
     def start_reader(self, port_name: str):
 
-        # stop old reader if existed
+        # Stop old reader if any
         if self.reader is not None:
             self.reader.stop()
 
-        # Thread-safe MIDI → GUI handler
+        # Handler runs in MIDI thread: emit signal back to GUI thread
         def handle_msg(msg):
             if msg.type == "note_on" and msg.velocity > 0:
-                self.note_received.emit(msg.note)
+                self.note_received.emit(msg.note, msg.velocity)
 
-        # IMPORTANT: disable auto-detection
+        # Don't auto-detect – we already know the port
         self.reader = USBMIDIReader(
             message_handler=handle_msg,
             auto_start=False,
@@ -166,7 +156,7 @@ class DrumApp(QWidget):
 def main():
     app = QApplication(sys.argv)
     window = DrumApp()
-    window.resize(800, 400)
+    window.resize(900, 500)
     window.show()
     sys.exit(app.exec())
 

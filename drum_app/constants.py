@@ -47,3 +47,62 @@ NOTE_NAMES = {
     80: "Mute Triangle",
     81: "Open Triangle"
 }
+
+MUSICAL_SYMBOLS = {
+    "♩": "Quarter Note",
+    "♪": "Eighth Note",
+    "♫": "Beamed Eighth Notes / Multiple Eighth Notes",
+    "♬": "Beamed Sixteenth Notes",
+    "𝅝": "Whole Note",
+    "𝅗𝅥": "Half Note",
+    "𝅘𝅥": "Quarter Note (Unicode Standard)",
+    "𝅘𝅥𝅮": "Eighth Note (Unicode Standard)",
+    "𝅘𝅥𝅯": "Sixteenth Note",
+    "𝅘𝅥𝅰": "Thirty-second Note",
+
+    "𝄽": "Whole Rest",
+    "𝄼": "Half Rest",
+    "𝄻": "Quarter Rest",
+    "𝄾": "Eighth Rest",
+    "𝄿": "Sixteenth Rest",
+
+    "𝄞": "Treble Clef",
+    "𝄢": "Bass Clef",
+    "𝄡": "Percussion Clef",   # Used for drums
+    "𝄟": "C Clef (Alto/Tenor)",
+
+    "𝄐": "Fermata (Hold the note)",
+    "𝄁": "Double Barline",
+    "𝄂": "Final Barline",
+    "𝄃": "Reverse Final Barline",
+    "𝄀": "Single Barline",
+
+    "𝄅": "Repeat Start",
+    "𝄆": "Repeat End",
+
+    ">": "Accent",
+    "^": "Marcato Accent",
+    "-": "Tenuto (Play smoothly / connected)",
+    ".": "Staccato (Short note)",
+
+    "𝆑": "Crescendo",
+    "𝆓": "Decrescendo / Diminuendo",
+    "p": "Piano (Soft)",
+    "pp": "Pianissimo (Very Soft)",
+    "f": "Forte (Loud)",
+    "ff": "Fortissimo (Very Loud)",
+    "mf": "Mezzo Forte (Medium Loud)",
+    "mp": "Mezzo Piano (Medium Soft)",
+
+    "𝄋": "Coda",
+    "𝄌": "Segno",
+    "D.C.": "Da Capo (Go to beginning)",
+    "D.S.": "Dal Segno (Go to sign)",
+    "Fine": "End",
+    "To Coda": "Jump to Coda",
+
+    "O": "Open Hi-Hat / Open Sound (Drum notation)",
+    "+": "Closed Hi-Hat",
+    "x": "Cymbal Notehead",
+    "o": "Ghost Note",
+}
